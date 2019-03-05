@@ -34,7 +34,7 @@ class MarketsPipeline(object):
     def process_item(self, item, spider):
 
         # 写sql语句 插数据，没有表的话要先在数据库创建
-        sql = """INSERT INTO base_city_market(title, lng, lat, comprehension, city_level) VALUES ("%s","%s","%s","%s","%s") """ % (item['title'], item['lng'], item['lat'], item['comprehension'], item['city_level'])
+        sql = """INSERT INTO base_city_market(city, county, district, lng, lat, comprehension, city_level) VALUES ("%s","%s","%s","%s","%s","%s","%s") """ % (item['city'],item['county'],item['district'], item['lng'], item['lat'], item['comprehension'], item['city_level'])
 
         # 创建游标对象
         self.cursor = self.conn.cursor()

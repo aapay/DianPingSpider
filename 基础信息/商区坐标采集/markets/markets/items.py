@@ -9,7 +9,9 @@ import scrapy
 
 
 class MarketsItem(scrapy.Item):
-    title = scrapy.Field()
+    city = scrapy.Field()
+    county = scrapy.Field()
+    district = scrapy.Field()
     lng = scrapy.Field()
     lat = scrapy.Field()
     comprehension = scrapy.Field()
