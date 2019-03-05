@@ -10,4 +10,12 @@
     内容更新处理
     
     
-# 使用方法
+# 补漏使用方法
+1. 配置组件 zok_config.py 的 数据库链接
+2. 捕获错误rul并储存  中间件middlewares的process_exception方法中引入
+```python
+from zok.error_url import save_error
+
+def process_exception(self, request, exception, spider):
+    save_error.ErrorUrl(request.url, spider.name)
+```
