@@ -9,6 +9,10 @@ import scrapy
 
 
 class MarketsItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    title = scrapy.Field()
+    lng = scrapy.Field()
+    lat = scrapy.Field()
+    comprehension = scrapy.Field()
+    city_level = scrapy.Field()
+
+

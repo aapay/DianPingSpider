@@ -95,9 +95,4 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-# mysql
-HOST = "localhost"
-USER = "root"
-PASSWORD = ""
-DB_NAME = "dianping"
-PORT = 3306
+

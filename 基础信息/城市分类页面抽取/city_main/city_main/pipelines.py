@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import pymysql
 
-from city_main.settings import HOST, USER, PASSWORD, DB_NAME, PORT
+# mysql
+HOST = "localhost"
+USER = "root"
+PASSWORD = ""
+DB_NAME = "dianping"
+PORT = 3306
 
 
 class CityMainPipeline(object):
@@ -28,7 +33,7 @@ class CityMainPipeline(object):
     def process_item(self, item, spider):
 
         # 写sql语句 插数据，没有表的话要先在数据库创建
-        sql = """INSERT INTO test(city, county, district) VALUES ("%s","%s","%s") """ % (item['city'], item['county'], item['district'])
+        sql = """INSERT INTO base_city(city, county, district) VALUES ("%s","%s","%s") """ % (item['city'], item['county'], item['district'])
 
         # 创建游标对象
         self.cursor = self.conn.cursor()
