@@ -9,8 +9,6 @@ from scrapy import signals
 
 from city_main.proxies import proxyServer, proxyAuth
 
-from zok.error_url import save_error
-
 
 class ProxyMiddleware(object):
     """自定义中间件代理IP"""

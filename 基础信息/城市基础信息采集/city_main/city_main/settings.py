@@ -22,10 +22,14 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36
 ROBOTSTXT_OBEY = False
 
 RANDOMIZE_DOWNLOAD_DELAY = False
-DOWNLOAD_DELAY = 60/200
-CONCURRENT_REQUESTS_PER_IP = 5
-# Configure maximum concurrent requests performed by Scrapy (default: 16)
+# DOWNLOAD_DELAY = 60/200
 CONCURRENT_REQUESTS = 5
+
+# 修改下载中间件， 代理IP
+DOWNLOADER_MIDDLEWARES = {
+   'city_main.middlewares.CityMainDownloaderMiddleware': None,
+   'city_main.middlewares.ProxyMiddleware': 125,  # 自定义的中间件
+}
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -56,11 +60,7 @@ CONCURRENT_REQUESTS = 5
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 
-# 修改下载中间件， 代理IP
-DOWNLOADER_MIDDLEWARES = {
-   'city_main.middlewares.CityMainDownloaderMiddleware': None,
-   'city_main.middlewares.ProxyMiddleware': 125,  # 自定义的中间件
-}
+
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -70,9 +70,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'city_main.pipelines.CityMainPipeline': 300,
-}
+# ITEM_PIPELINES = {
+#    'city_main.pipelines.CityMainPipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

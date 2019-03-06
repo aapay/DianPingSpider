@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
+# 城市商圈采集
 import scrapy
 import json
 
-from markets.items import MarketsItem
+from city_main.items import MarketsItem
 
 
 class CitySpiderSpider(scrapy.Spider):
-    name = 'city_spider'
+    name = 'city_market'
+
+    # 单独配置pipelines
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'city_main.pipelines.MarketsPipeline': 300,
+        }
+    }
 
     start_urls = ['http://www.dianping.com/citylist/']
 

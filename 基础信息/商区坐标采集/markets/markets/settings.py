@@ -16,11 +16,24 @@ NEWSPIDER_MODULE = 'markets.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'markets (+http://www.yourdomain.com)'
-
+# LOG_LEVEL = 'ERROR'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+RANDOMIZE_DOWNLOAD_DELAY = False
+DOWNLOAD_DELAY = 60/200
+CONCURRENT_REQUESTS_PER_IP = 5
+# Configure maximum concurrent requests performed by Scrapy (default: 16)
+CONCURRENT_REQUESTS = 5
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
+# 修改下载中间件， 代理IP
+DOWNLOADER_MIDDLEWARES = {
+   'markets.middlewares.CityMainDownloaderMiddleware': None,
+   'markets.middlewares.ProxyMiddleware': 125,  # 自定义的中间件
+}
+ITEM_PIPELINES = {
+   'markets.pipelines.MarketsPipeline': 300,
+}
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -64,9 +77,7 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'markets.pipelines.MarketsPipeline': 300,
-#}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# 城市三级区域目录采集
+
 import scrapy
 
 from city_main.items import CityMainItem
@@ -6,7 +8,14 @@ from city_main.items import CityMainItem
 
 class CityListSpider(scrapy.Spider):
     name = 'city_list'
-    # allowed_domains = ['http://www.dianping.com/citylist']  # 仅允许该域名内
+
+    # 单独配置pipelines
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'city_main.pipelines.CityMainPipeline': 300,
+        }
+    }
+
     start_urls = ['http://www.dianping.com/citylist/']
 
     def parse(self, response):
@@ -57,4 +66,3 @@ class CityListSpider(scrapy.Spider):
             item['district'] = district[:-1]
 
             yield item
-

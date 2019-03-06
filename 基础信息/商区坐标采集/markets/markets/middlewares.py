@@ -7,6 +7,15 @@
 
 from scrapy import signals
 
+from markets.proxies import proxyServer, proxyAuth
+
+
+class ProxyMiddleware(object):
+    """自定义中间件代理IP"""
+    def process_request(self, request, spider):
+        request.meta["proxy"] = proxyServer
+        request.headers["Proxy-Authorization"] = proxyAuth
+
 
 class MarketsSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
