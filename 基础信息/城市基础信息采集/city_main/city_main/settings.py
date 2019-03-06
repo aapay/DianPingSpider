@@ -23,13 +23,19 @@ ROBOTSTXT_OBEY = False
 
 RANDOMIZE_DOWNLOAD_DELAY = False
 # DOWNLOAD_DELAY = 60/200
-CONCURRENT_REQUESTS = 5
+# CONCURRENT_REQUESTS = 5
+CONCURRENT_REQUESTS_PER_IP = 5
 
 # 修改下载中间件， 代理IP
 DOWNLOADER_MIDDLEWARES = {
    'city_main.middlewares.CityMainDownloaderMiddleware': None,
    'city_main.middlewares.ProxyMiddleware': 125,  # 自定义的中间件
 }
+# 指定终端输出日志
+LOG_LEVEL = 'WARNING'
+
+# 日志存储指定位置
+# LOG_FILE = 'error_log.txt'
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay

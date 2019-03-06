@@ -27,7 +27,7 @@ class MarketsItem(scrapy.Item):
 class LandmarkItem(scrapy.Item):
     city = scrapy.Field()
     county = scrapy.Field()
-    district = scrapy.Field()
+    landmark = scrapy.Field()
     lng = scrapy.Field()
     lat = scrapy.Field()
     comprehension = scrapy.Field()

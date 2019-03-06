@@ -122,7 +122,7 @@ class CityLandmarkPipeline(object):
 
     # 爬虫开始执行
     def open_spider(self, spider):
-        print('开始爬虫，链接数据库')
+        print('开始地标，链接数据库')
         self.conn = pymysql.Connect(
             host=HOST,
             port=PORT,
@@ -154,6 +154,6 @@ class CityLandmarkPipeline(object):
 
     # 结束爬虫时调用
     def close_spider(self, spider):
-        print('爬虫结束, 关闭通道')
+        print('爬虫地标结束, 关闭通道')
         self.cursor.close()
         self.conn.close()
