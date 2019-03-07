@@ -1,7 +1,0 @@
-错误rul = http://www.dianping.com/citylist
-错误rul = http://www.dianping.com/citylist
-错误rul = http://www.dianping.com/citylist
-错误rul = http://www.dianping.com/citylist
-错误rul = http://www.dianping.com/citylist
-错误rul = http://www.dianping.com/citylist
-错误rul = http://www.dianping.com/citylist

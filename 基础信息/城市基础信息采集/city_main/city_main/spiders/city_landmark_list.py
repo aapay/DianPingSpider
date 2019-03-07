@@ -10,6 +10,7 @@ from city_main.items import LandmarkListItem
 
 
 class CityLandmarkListSpider(scrapy.Spider):
+
     name = 'city_landmark_list'
     start_urls = ['http://www.dianping.com/citylist']
     # 单独配置pipelines
@@ -20,6 +21,24 @@ class CityLandmarkListSpider(scrapy.Spider):
     }
 
     def parse(self, response):
+        item = LandmarkListItem()
+        flag = False
+        # 先判断是否有之前的错误链接，有的话就执行该方法内的
+        with open('CityLandmarkListSpider_error_url.txt', 'r', encoding='utf-8') as f:
+            flag = True
+            while True:
+                text_line = f.readline()
+                if text_line:
+                    error_info = text_line.split(',')
+                    print('检测到有错误链接', error_info[1], error_info[0])
+                    yield scrapy.Request(url=error_info[1], callback=self.parse_content, meta={'item': item, 'city': error_info[0]})
+                else:
+                    break
+        if flag:
+            print('错误链接补录完成')
+            return
+
+        # 正式操作
         city_list = response.xpath('//*[@id="main"]/div[4]/ul/li')
         for c_item in city_list:
             i_list = c_item.xpath('./div[2]/div/a')
@@ -27,7 +46,7 @@ class CityLandmarkListSpider(scrapy.Spider):
                 city = i.xpath('./text()').extract_first()
                 href = i.xpath('./@href').extract_first()
                 href = 'https://' + href[2:]
-                item = LandmarkListItem()
+
                 yield scrapy.Request(url=href, callback=self.parse_content, meta={'item': item, 'city': city})
 
     def parse_content(self, response):
@@ -38,10 +57,8 @@ class CityLandmarkListSpider(scrapy.Spider):
         city = response.meta.get('city')
         href = response.xpath('//*[@id="cata-hot"]/div/div/a/@href').extract_first()
         if not href:
-            info = '当前城市筛选失败' + city + response.url
-            print(info)
-            with open('错误信息.txt', 'a', encoding='utf-8') as f:
-                f.write(info + '\n')
+            with open('CityLandmarkListSpider_error_url.txt', 'a', encoding='utf-8') as f:
+                f.write(city+','+response.url + '\n')
         else:
             # 处理字符串 把闲杂符号去掉
             city_href = 'https:' + href

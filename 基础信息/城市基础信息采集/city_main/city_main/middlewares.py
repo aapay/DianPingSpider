@@ -77,7 +77,7 @@ class CityMainDownloaderMiddleware(object):
         # 交给组件zok error_url处理
         # save_error.ErrorUrl(request.url, spider.name)
         with open('error_url.txt', 'a', encoding='utf8') as f:
-            f.write('错误rul = '+request.url + '\n')
+            f.write('request 请求错误 rul = '+request.url + '\n')
         pass
 
     def spider_opened(self, spider):

@@ -48,7 +48,7 @@ class CityLandmarkListPipeline(SaveToMysqlBase):
     """
     @staticmethod
     def get_sql(item):
-        sql = """INSERT INTO base_city_landmark(city, county, landmark) VALUES ("{city}","{county}","{landmark}") """.format(
+        sql = """INSERT INTO base_city_landmark_list(city, county, landmark) VALUES ("{city}","{county}","{landmark}") """.format(
             city=item['city'],
             county=item['county'],
             landmark=item['landmark'],
