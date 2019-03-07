@@ -17,7 +17,7 @@ class CityLandmarkSpider(scrapy.Spider):
         }
     }
 
-    start_urls = ['http://www.dianping.com/citylist/']
+    start_urls = ['http://www.dianping.com/citylist']
 
     def parse(self, response):
         city_list = response.xpath('//*[@id="main"]/div[4]/ul/li')
@@ -38,6 +38,8 @@ class CityLandmarkSpider(scrapy.Spider):
         city = response.meta.get('city')
         href = response.xpath('//*[@id="cata-hot"]/div/div/a/@href').extract_first()
 
+        if not href:
+            return
         # 处理字符串 把闲杂符号去掉
         city_href = 'https:' + href
 

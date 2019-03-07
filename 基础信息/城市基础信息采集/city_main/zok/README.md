@@ -1,23 +1,33 @@
 # Zok组件使用说明
 
 ### 目录
-- error_url 
-    
-    1. 补漏功能
-    2. 处理爬取失败的链接
-    3. 将单个爬虫爬取失败的链接单独储存，在运行爬虫之前查询该错误链接是否有，如果有就只爬取库中的错误链接，否则重新爬取
-    
 - repetition
 
     内容更新处理
     
+- save
     
-# 补漏使用方法
-1. 配置组件 zok_config.py 的 数据库链接
-2. 捕获错误rul并储存  中间件middlewares的process_exception方法中引入
-```python
-from zok.error_url import save_error
+    通用持久化存储组件
+    
+    
+### 补漏使用方法
 
-def process_exception(self, request, exception, spider):
-    save_error.ErrorUrl(request.url, spider.name)
+
+### save组件使用方法
+
+1. 必须在zok_config中配置要持久化的数据库账户密码
+2. 在爬虫项目文件pipelines管道中，引入并使用
+**必须调用 def_sql(item)方法，并返回sql语句即可**
+```python
+from zok.save.to_mysql import SaveToMysqlBase
+
+class CityLandmarkListPipeline(SaveToMysqlBase):
+    @staticmethod
+    def get_sql(item):
+        sql = """INSERT INTO base_city_landmark(city, county, landmark) VALUES ("{city}","{county}","{landmark}") """.format(
+            city=item['city'],
+            county=item['county'],
+            landmark=item['landmark'],
+        )
+        return sql
 ```

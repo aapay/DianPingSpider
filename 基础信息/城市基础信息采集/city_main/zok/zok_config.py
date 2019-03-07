@@ -8,3 +8,6 @@ USER = "root"
 PASSWORD = ""
 DB_NAME = "dianping"
 PORT = 3306
+
+# txt
+TXT_NAME = '项目储存.txt'

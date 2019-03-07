@@ -14,27 +14,27 @@ BOT_NAME = 'city_main'
 SPIDER_MODULES = ['city_main.spiders']
 NEWSPIDER_MODULE = 'city_main.spiders'
 
-
+DOWNLOAD_FAIL_ON_DATALOSS = False
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
-RANDOMIZE_DOWNLOAD_DELAY = False
-# DOWNLOAD_DELAY = 60/200
-# CONCURRENT_REQUESTS = 5
+RANDOMIZE_DOWNLOAD_DELAY = True  # 开启随机增加毫秒级延迟，增加访问成功率
+CONCURRENT_REQUESTS = 5
+CONCURRENT_REQUESTS_PER_DOMAIN = 5
 CONCURRENT_REQUESTS_PER_IP = 5
 
 # 修改下载中间件， 代理IP
 DOWNLOADER_MIDDLEWARES = {
-   'city_main.middlewares.CityMainDownloaderMiddleware': None,
+   'city_main.middlewares.CityMainDownloaderMiddleware': 100,
    'city_main.middlewares.ProxyMiddleware': 125,  # 自定义的中间件
 }
-# 指定终端输出日志
-LOG_LEVEL = 'WARNING'
-
-# 日志存储指定位置
+# # 指定终端输出日志
+# LOG_LEVEL = 'WARNING'
+#
+# # 日志存储指定位置
 # LOG_FILE = 'error_log.txt'
 
 # Configure a delay for requests for the same website (default: 0)
