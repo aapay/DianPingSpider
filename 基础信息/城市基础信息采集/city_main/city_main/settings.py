@@ -28,12 +28,13 @@ CONCURRENT_REQUESTS_PER_IP = 5
 
 # 修改下载中间件， 代理IP
 DOWNLOADER_MIDDLEWARES = {
-   'city_main.middlewares.CityMainDownloaderMiddleware': 100,
-   'city_main.middlewares.ProxyMiddleware': 125,  # 自定义的中间件
+   'city_main.middlewares.CityMainDownloaderMiddleware': 10,
+   'zok.proxies.proxies.ProxyMiddleware': 15,  # 自定义的中间件
+   'zok.random_UA.ua_random.RandomUserAgentMiddleware': 20,
 }
 # # 指定终端输出日志
 # LOG_LEVEL = 'WARNING'
-#
+
 # # 日志存储指定位置
 # LOG_FILE = 'error_log.txt'
 

@@ -5,6 +5,7 @@
 import pymysql
 
 from zok.zok_config import *
+from zok.repetition.update_cache import CacheRedis
 
 
 class SaveToMysqlBase(object):
@@ -15,6 +16,7 @@ class SaveToMysqlBase(object):
     """
     conn = None
     cursor = None  # 游标对象
+    redis = CacheRedis()
 
     # 1. 链接数据库
     # 2. 执行sql语句
@@ -24,29 +26,34 @@ class SaveToMysqlBase(object):
     def open_spider(self, spider):
         print('开始爬虫，链接数据库')
         self.conn = pymysql.Connect(
-            host=HOST,
-            port=PORT,
-            user=USER,
-            password=PASSWORD,
-            db=DB_NAME,
+            host=MYSQL_HOST,
+            port=MYSQL_PORT,
+            user=MYSQL_USER,
+            password=MYSQL_PASSWORD,
+            db=MYSQL_DB_NAME,
         )
 
     def process_item(self, item, spider):
         # 写sql语句 插数据，没有表的话要先在数据库创建
-
-        # 创建游标对象
         sql = self.get_sql(item)
-        # 创建游标对象
-        self.cursor = self.conn.cursor()
-        # 提交事务
-        try:
-            self.cursor.execute(sql)
-            self.conn.commit()
-        except Exception as e:
-            print(e)
-            print('异常回滚')
-            self.conn.rollback()
-        return item
+        if not self.redis.redis_exists(sql):
+            # 创建游标对象
+            self.cursor = self.conn.cursor()
+            # 提交事务
+            try:
+                self.cursor.execute(sql)
+                last_id = int(self.conn.insert_id())  # 取最近插入的一条
+                self.conn.commit()
+                self.redis.save_redis(sql, last_id)
+                # int(cursor.lastrowid)  # 最后插入行的主键ID
+                # int(conn.insert_id())  # 最新插入行的主键ID，conn.insert_id()一定要在conn.commit()之前，否则会返回0
+            except Exception as e:
+                print(e)
+                print('异常回滚')
+                self.conn.rollback()
+            return item
+        else:
+            print('已有相同数据无需插入')
 
     # 结束爬虫时调用
     def close_spider(self, spider):
