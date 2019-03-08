@@ -33,7 +33,7 @@ class CityLandmarkSpider(scrapy.Spider):
         # 导出city_landmark_list数据表 为txt然后逐行读取，并提交获取返回值
         url = 'http://api.map.baidu.com/geocoder/v2/?address=%s&output=json&ak=5f7my8MjAU4HFtO6ZpdazTQI1xKMwn2l'
         # 先判断是否有之前的错误链接
-        with open('base_city_landmark_list.txt', 'r', encoding='utf-8') as f:
+        with open('data/base_city_landmark_list.txt', 'r', encoding='utf-8') as f:
             text_lines = f.readlines()
             for line in text_lines:
                 line = line.strip()
