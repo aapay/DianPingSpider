@@ -1,0 +1,12 @@
+2019-03-08 14:18:39 [scrapy.core.scraper] ERROR: Error downloading <GET https://www.dianping.com/citylist>
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/scrapy/core/downloader/middleware.py", line 43, in process_request
+    defer.returnValue((yield download_func(request=request,spider=spider)))
+scrapy.core.downloader.handlers.http11.TunnelError: Could not open CONNECT tunnel with proxy http-dyn.abuyun.com:9020 [{'status': 402, 'reason': b'Payment Required'}]
+2019-03-08 14:18:39 [scrapy.core.engine] ERROR: Scraper close failure
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/twisted/internet/defer.py", line 654, in _runCallbacks
+    current.result = callback(current.result, *args, **kw)
+  File "/Users/hisense/Documents/开发项目/大众点评爬虫/dianping/base/zok/save/to_mysql.py", line 61, in close_spider
+    self.cursor.close()
+AttributeError: 'NoneType' object has no attribute 'close'
