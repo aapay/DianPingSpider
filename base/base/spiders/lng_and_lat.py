@@ -24,68 +24,74 @@ class LngAndLatSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        注意，逐个爬取，避免爬虫并发储存窜表
+        逐表爬取，避免并发窜表
+        check error url for error_url_info.txt
         :param response:
         :return:
         """
+
         item = BaseLngLatItem()
+        with open('error/error_url_info.txt', 'r+', encoding='utf-8') as f:
+            text_lines = f.readlines()
+            print(text_lines)
+            if text_lines == '':
+                return False
+            f.truncate()  # 清空文件
+            for line in text_lines:
+                line_list = line.split('|')
+                attr_url = line_list[2].strip()
+                address = line_list[1].split(',')
+                get_type = line_list[0].strip()
+                thirdly = ''
+                if len(address) == 3:
+                    thirdly = address[2]
+                elif len(address) == 2:
+                    thirdly = ''
+                yield scrapy.Request(url=attr_url, callback=self.parse_location,
+                                     meta={'type': get_type, 'item': item, 'city': address[0],
+                                           'second': address[1],
+                                           'thirdly': thirdly})
+
         url = 'http://api.map.baidu.com/geocoder/v2/?address={address}&output=json&ak=5f7my8MjAU4HFtO6ZpdazTQI1xKMwn2l'
 
-        with open('data/base_city_school.txt', 'r', encoding='utf-8') as f:
-            text_lines = f.readlines()
-            for line in text_lines:
-                line = line.strip()
-                line_list = line.split('\t')
-                address = eval(line_list[0]) + eval(line_list[1])
-                attr_url = url.format(address=address)
-                yield scrapy.Request(url=attr_url, callback=self.parse_location,
-                                     meta={'type': 'school', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
-                                           'thirdly': ''})
-
-        with open('data/base_city_landmark.txt', 'r', encoding='utf-8') as f:
-            text_lines = f.readlines()
-            for line in text_lines:
-                line = line.strip()
-                line_list = line.split('\t')
-                address = eval(line_list[0]) + eval(line_list[1]) + eval(line_list[2])
-                attr_url = url.format(address=address)
-                yield scrapy.Request(url=attr_url, callback=self.parse_location,
-                                     meta={'type': 'landmark', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
-                                           'thirdly': eval(line_list[2])})
-
-        with open('data/base_city_market.txt', 'r', encoding='utf-8') as f:
-            text_lines = f.readlines()
-            for line in text_lines:
-                line = line.strip()
-                line_list = line.split('\t')
-                if len(line_list) == 3:
-                    address = eval(line_list[0]) + eval(line_list[1]) + eval(line_list[2])
-                    attr_url = url.format(address=address)
-                    yield scrapy.Request(url=attr_url, callback=self.parse_location,
-                                         meta={'type': 'market', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
-                                               'thirdly': eval(line_list[2])})
-                elif len(line_list) == 2:
-                    address = eval(line_list[0]) + eval(line_list[1])
-                    attr_url = url.format(address=address)
-                    yield scrapy.Request(url=attr_url, callback=self.parse_location,
-                                         meta={'type': 'market', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
-                                               'thirdly': ''})
-
-        # with open('error/临时采集失败url.txt', 'r', encoding='utf-8') as f:
+        # with open('data/base_city_school.txt', 'r', encoding='utf-8') as f:
         #     text_lines = f.readlines()
         #     for line in text_lines:
-        #         attr_url = line.split('|')[1]
+        #         line = line.strip()
+        #         line_list = line.split('\t')
+        #         address = eval(line_list[0]) + eval(line_list[1])
+        #         attr_url = url.format(address=address)
+        #         yield scrapy.Request(url=attr_url, callback=self.parse_location,
+        #                              meta={'type': 'school', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
+        #                                    'thirdly': ''})
         #
-        #         address = line.split('|')[0].split(',')
-        #         if len(address) == 3:
-        #             yield scrapy.Request(url=line.split('|')[1], callback=self.parse_location,
-        #                                  meta={'type': 'market', 'item': item, 'city': address[0],
-        #                                        'second': address[1],
-        #                                        'thirdly': address[2]})
-        #         elif len(address) == 2:
-        #             yield scrapy.Request(url=line.split('|')[1], callback=self.parse_location,
-        #                                  meta={'type': 'market', 'item': item, 'city': address[0],
-        #                                        'second': address[1],
+        # with open('data/base_city_landmark.txt', 'r', encoding='utf-8') as f:
+        #     text_lines = f.readlines()
+        #     for line in text_lines:
+        #         line = line.strip()
+        #         line_list = line.split('\t')
+        #         address = eval(line_list[0]) + eval(line_list[1]) + eval(line_list[2])
+        #         attr_url = url.format(address=address)
+        #         yield scrapy.Request(url=attr_url, callback=self.parse_location,
+        #                              meta={'type': 'landmark', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
+        #                                    'thirdly': eval(line_list[2])})
+        #
+        # with open('data/base_city_market.txt', 'r', encoding='utf-8') as f:
+        #     text_lines = f.readlines()
+        #     for line in text_lines:
+        #         line = line.strip()
+        #         line_list = line.split('\t')
+        #         if len(line_list) == 3:
+        #             address = eval(line_list[0]) + eval(line_list[1]) + eval(line_list[2])
+        #             attr_url = url.format(address=address)
+        #             yield scrapy.Request(url=attr_url, callback=self.parse_location,
+        #                                  meta={'type': 'market', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
+        #                                        'thirdly': eval(line_list[2])})
+        #         elif len(line_list) == 2:
+        #             address = eval(line_list[0]) + eval(line_list[1])
+        #             attr_url = url.format(address=address)
+        #             yield scrapy.Request(url=attr_url, callback=self.parse_location,
+        #                                  meta={'type': 'market', 'item': item, 'city': eval(line_list[0]), 'second': eval(line_list[1]),
         #                                        'thirdly': ''})
 
     @staticmethod
@@ -107,14 +113,15 @@ class LngAndLatSpider(scrapy.Spider):
 
             yield item
         else:
-            print('坐标获取失败')
+            print('GET失败')
+            data_type = response.meta.get('type')
             city = response.meta.get('city')
             second = response.meta.get('second')
             thirdly = response.meta.get('thirdly')
             if thirdly:
-                info = city+","+second+","+thirdly
+                info = city + "," + second + "," + thirdly
             else:
                 info = city + "," + second
-            with open('error/临时采集失败url.txt', 'a', encoding='utf-8') as f:
-                f.write(info+'|'+response.url + '\n')
+            with open('error/error_url_info.txt', 'a', encoding='utf-8') as f:
+                f.write(data_type + '|' + info + '|' + response.url + '\n')
 
